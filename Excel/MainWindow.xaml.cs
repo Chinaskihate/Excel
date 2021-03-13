@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CsvHelper;
 
 namespace Excel
 {
@@ -23,6 +24,7 @@ namespace Excel
         public MainWindow()
         {
             InitializeComponent();
+            DataGrid dg = new DataGrid();
         }
     }
 }

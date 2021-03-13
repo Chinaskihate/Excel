@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:Excel"
         mc:Ignorable="d"
         Title="Excel" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+
+        </Menu>
+    </DockPanel>
 </Window>
