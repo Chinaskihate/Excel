@@ -190,5 +190,23 @@ namespace Excel
                 sw.Show();
             }
         }
+
+        private void histogramButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (dt != null)
+            {
+                HistogramWindow hw = new HistogramWindow(dt);
+                hw.Show();
+            }
+        }
+
+        private void chartButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (dt != null)
+            {
+                ChartWindow cw = new ChartWindow(dt);
+                cw.Show();
+            }
+        }
     }
 }

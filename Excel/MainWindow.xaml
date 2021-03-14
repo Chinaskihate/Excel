@@ -17,6 +17,8 @@
 
             <MenuItem Header="_Графики">
                 <MenuItem x:Name="statisticButton" Header="_Статистические данные" Click="statisticButton_Click"></MenuItem>
+                <MenuItem x:Name="histogramButton" Header="_Гистограмма" Click="histogramButton_Click"></MenuItem>
+                <MenuItem x:Name="chartButton" Header="_Двумерный график" Click="chartButton_Click"></MenuItem>
             </MenuItem>
         </Menu>
         <DataGrid x:Name="dataGrid" 

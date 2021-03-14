@@ -1,0 +1,22 @@
+﻿<Window x:Class="Excel.HistogramWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lvs="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        d:DataContext="{d:DesignInstance local:HistogramWindow}"
+        xmlns:local="clr-namespace:Excel"
+        mc:Ignorable="d"
+        Title="HistogramWindow" Height="450" Width="800">
+    <Grid>
+        <lvs:CartesianChart x:Name="chart" Series="{Binding SeriesCollection}"
+                            LegendLocation="Right">
+            <lvs:CartesianChart.AxisX>
+                <lvs:Axis Title="Количественные данные" Labels="{Binding BarLabels}"></lvs:Axis>
+            </lvs:CartesianChart.AxisX>
+            <lvs:CartesianChart.AxisY>
+                <lvs:Axis Title="Частота" LabelFormatter="{Binding Formatter}"></lvs:Axis>
+            </lvs:CartesianChart.AxisY>
+        </lvs:CartesianChart>
+    </Grid>
+</Window>
