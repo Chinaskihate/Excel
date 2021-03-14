@@ -6,9 +6,31 @@
         xmlns:local="clr-namespace:Excel"
         mc:Ignorable="d"
         Title="Excel" Height="450" Width="800">
-    <DockPanel>
+    <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem x:Name="openButton" Header="Открыть" Click="openButton_Click"></MenuItem>
+            </MenuItem>
 
+            <MenuItem Header="Графики">
+                <MenuItem Header="Открыть"></MenuItem>
+            </MenuItem>
         </Menu>
+
+        <DataGrid x:Name="dataGrid" 
+                  AutoGenerateColumns="True"
+                  IsReadOnly="true"    
+                  CanUserAddRows="False"    
+                  CanUserDeleteRows="False"    
+                  CanUserResizeRows="True"    
+                  CanUserSortColumns="False"    
+                  CanUserResizeColumns="True"      
+                  CanUserReorderColumns="False"    
+                  SelectionMode="Extended"    
+                  SelectionUnit="Cell"    
+                  AlternationCount="2"      
+                  Background="{x:Null}"                           
+                  BorderBrush="{x:Null}"
+                  />
     </DockPanel>
 </Window>
