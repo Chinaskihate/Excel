@@ -13,7 +13,7 @@
             </MenuItem>
 
             <MenuItem Header="Графики">
-                <MenuItem Header="Открыть"></MenuItem>
+                <MenuItem x:Name="statisticButton" Header="Статистические данные" Click="statisticButton_Click"></MenuItem>
             </MenuItem>
         </Menu>
 
