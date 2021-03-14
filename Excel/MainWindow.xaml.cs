@@ -17,6 +17,8 @@ namespace Excel
     /// </summary>
     public partial class MainWindow : Window
     {
+        DataTable dt;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -43,9 +45,10 @@ namespace Excel
                 }
             }
 
-            DataTable dt = GetDataTableFromCSV(openFileDialog.FileName);
+            dt = GetDataTableFromCSV(openFileDialog.FileName);
             if (dt != null)
             {
+
                 dataGrid.ItemsSource = dt.DefaultView;
             }
         }
@@ -54,7 +57,8 @@ namespace Excel
         {
             try
             {
-                OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + System.IO.Path.GetDirectoryName(path) + ";Extended Properties=\"Text;HDR == YES;FMT = Delimited\"");
+                OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + System.IO.Path.GetDirectoryName(path) +
+                     ";Extended Properties=\"Text;HDR=NO;IMEX=1\"");
                 conn.Open();
                 string strQuery = "Select * from [" + System.IO.Path.GetFileName(path) + "]";
                 OleDbDataAdapter da = new OleDbDataAdapter(strQuery, conn);
@@ -64,8 +68,11 @@ namespace Excel
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message,"Ошибка");
                 return null;
             }
         }
+
+
     }
 }
