@@ -8,29 +8,29 @@
         Title="Excel" Height="450" Width="800">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Файл">
-                <MenuItem x:Name="openButton" Header="Открыть" Click="openButton_Click"></MenuItem>
+            <MenuItem Header="_Файл">
+                <MenuItem x:Name="openButton" 
+                          Header="_Открыть" 
+                          Click="openButton_Click"
+                          ></MenuItem>
             </MenuItem>
 
-            <MenuItem Header="Графики">
-                <MenuItem x:Name="statisticButton" Header="Статистические данные" Click="statisticButton_Click"></MenuItem>
+            <MenuItem Header="_Графики">
+                <MenuItem x:Name="statisticButton" Header="_Статистические данные" Click="statisticButton_Click"></MenuItem>
             </MenuItem>
         </Menu>
 
         <DataGrid x:Name="dataGrid" 
                   AutoGenerateColumns="True"
-                  IsReadOnly="true"    
+                  IsReadOnly="true"
                   CanUserAddRows="False"    
                   CanUserDeleteRows="False"    
                   CanUserResizeRows="True"    
-                  CanUserSortColumns="False"    
+                  CanUserSortColumns="True"    
                   CanUserResizeColumns="True"      
                   CanUserReorderColumns="False"    
                   SelectionMode="Extended"    
-                  SelectionUnit="Cell"    
-                  AlternationCount="2"      
-                  Background="{x:Null}"                           
-                  BorderBrush="{x:Null}"
-                  />
+                  SelectionUnit="Cell"   
+                  AlternationCount="2"/>
     </DockPanel>
 </Window>
