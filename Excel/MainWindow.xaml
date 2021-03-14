@@ -19,7 +19,6 @@
                 <MenuItem x:Name="statisticButton" Header="_Статистические данные" Click="statisticButton_Click"></MenuItem>
             </MenuItem>
         </Menu>
-
         <DataGrid x:Name="dataGrid" 
                   AutoGenerateColumns="True"
                   IsReadOnly="true"

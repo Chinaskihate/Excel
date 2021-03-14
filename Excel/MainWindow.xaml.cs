@@ -184,7 +184,11 @@ namespace Excel
 
         private void statisticButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (dt != null)
+            {
+                StatsWindow sw = new StatsWindow(dt);
+                sw.Show();
+            }
         }
     }
 }
