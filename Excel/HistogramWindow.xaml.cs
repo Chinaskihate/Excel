@@ -141,6 +141,8 @@ namespace Excel
             string columnName = boxData.SelectedItem.ToString();
             integerUpDown.Value = 1;
             FillHistogram(columnName);
+            colorPicker.Visibility = Visibility.Visible;
+            labelColor.Visibility = Visibility.Visible;
         }
 
         private void integerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -164,6 +166,15 @@ namespace Excel
                     }
                 }
             }
+        }
+
+        private void colorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            chart.SeriesColors = new ColorsCollection
+            {
+                (Color)colorPicker.SelectedColor
+            };
+            FillHistogram(boxData.SelectedItem.ToString(),(int)integerUpDown.Value);
         }
     }
 }
