@@ -5,29 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Excel"
         mc:Ignorable="d"
-        Title="Statistics" Height="450" Width="800">
+        Title="Statistics" Height="250" Width="400" WindowState="Maximized" MinHeight="250" MinWidth="400">
 
     <Canvas>
-        <Label Content="Числовой столбец:" Canvas.Top="10" Canvas.Left="10"></Label>
+        <Label Content="Числовой столбец:" Canvas.Left="10" Canvas.Top="10"/>
 
-        <Label Content="Среднее значение:" Canvas.Top="75" Canvas.Left="10"></Label>
-        <Label x:Name="averageLabel" Content="average"  Canvas.Top="95" Canvas.Left="10" Height="30" Width="220"></Label>
+        <Label Content="Среднее значение:" Canvas.Left="10" Canvas.Top="63" Width="198" ></Label>
+        <Label x:Name="averageLabel" Content="average" Canvas.Left="10" Canvas.Top="89" Width="198" />
 
-        <Label Content="Медиана:" Canvas.Top="75" Canvas.Left="230" Width="178"></Label>
-        <Label x:Name="medianLabel" Content="median" Canvas.Top="95" Canvas.Left="230" Height="30" Width="220"></Label>
+        <Label Content="Медиана:" Canvas.Left="207" Canvas.Top="63" Width="177"></Label>
+        <Label x:Name="medianLabel" Content="median" Canvas.Left="207" Canvas.Top="89" Width="177"/>
 
-        <Label Content="Среднеквадратичное отклонение:" Canvas.Top="126" Canvas.Left="10"></Label>
-        <Label x:Name="deviationLabel" Content="deviation" Canvas.Top="157" Canvas.Left="10" Height="30" Width="220"></Label>
+        <Label Content="Среднеквадратичное отклонение:" Canvas.Left="10" Canvas.Top="115"></Label>
+        <Label x:Name="deviationLabel" Content="deviation" Canvas.Left="10" Canvas.Top="141" Width="198"/>
 
-        <Label Content="Дисперсия:" Canvas.Top="126" Canvas.Left="230"></Label>
-        <Label x:Name="dispesionLabel" Content="dispersion" Canvas.Top="157" Canvas.Left="230" Height="30" Width="220"></Label>
+        <Label Content="Дисперсия:" Canvas.Left="208" Canvas.Top="115" Width="176"></Label>
+        <Label x:Name="dispesionLabel" Content="dispersion" Canvas.Left="208" Canvas.Top="141" Width="176"/>
 
-        <ComboBox x:Name="boxData" 
-                  Canvas.Left="10" 
-                  Canvas.Top="40" 
-                  Width="220" 
-                  Height="30"
-                  SelectionChanged="boxData_SelectionChanged"
-                  />
+        <ComboBox x:Name="boxData"
+                  SelectionChanged="boxData_SelectionChanged" Canvas.Left="10" Canvas.Top="36" Width="198"/>
     </Canvas>
 </Window>
