@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Excel
 {
@@ -20,9 +11,17 @@ namespace Excel
     /// </summary>
     public partial class StatsWindow : Window
     {
+        /// <summary>
+        /// Таблица с данными,
+        /// среднее значение(для удобства).
+        /// </summary>
         DataTable dt;
         double average = 1;
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="dt"> Таблица с данными. </param>
         public StatsWindow(DataTable dt)
         {
             InitializeComponent();
@@ -30,6 +29,12 @@ namespace Excel
             boxData.ItemsSource = GetNumericColumnsNames(dt);
         }
 
+        /// <summary>
+        /// Метод возвращающий названия столбцов
+        /// с числовыми значениями.
+        /// </summary>
+        /// <param name="dt"> Таблица с данными. </param>
+        /// <returns> Список названий столбцов с числовыми данными. </returns>
         static public List<string> GetNumericColumnsNames(DataTable dt)
         {
             List<string> names = new List<string>();
@@ -43,11 +48,22 @@ namespace Excel
             return names;
         }
 
+        /// <summary>
+        /// Метод при изменении значения выбранного столбца.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void boxData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SetLabels();
+            if (boxData.SelectedIndex != -1)
+            {
+                SetLabels();
+            }
         }
 
+        /// <summary>
+        /// Установка значений в Label-ах.
+        /// </summary>
         private void SetLabels()
         {
             if (dt.Rows.Count != 0)
@@ -59,6 +75,9 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Установка среднего значения.
+        /// </summary>
         private void SetAverage()
         {
             string columnName = boxData.SelectedItem.ToString();
@@ -71,6 +90,9 @@ namespace Excel
             average = sum / dt.Rows.Count;
         }
 
+        /// <summary>
+        /// Установка медианы.
+        /// </summary>
         private void SetMedian()
         {
             string columnName = boxData.SelectedItem.ToString();
@@ -91,6 +113,9 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Установка среднеквадратичного отклонения.
+        /// </summary>
         private void SetDeviation()
         {
             string columnName = boxData.SelectedItem.ToString();
@@ -103,6 +128,9 @@ namespace Excel
             deviationLabel.Content = Math.Sqrt(sum / dt.Rows.Count);
         }
 
+        /// <summary>
+        /// Установка дисперсии.
+        /// </summary>
         private void SetDispersion()
         {
             string columnName = boxData.SelectedItem.ToString();
