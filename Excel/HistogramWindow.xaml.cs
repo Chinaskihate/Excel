@@ -17,8 +17,15 @@ namespace Excel
     /// </summary>
     public partial class HistogramWindow : Window
     {
+        /// <summary>
+        /// Таблица с данными.
+        /// </summary>
         DataTable dt;
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="dt"> Таблица с данными. </param>
         public HistogramWindow(DataTable dt)
         {
             InitializeComponent();
@@ -26,6 +33,9 @@ namespace Excel
             FillBoxData();
         }
 
+        /// <summary>
+        /// Заполнение списка столбцами.
+        /// </summary>
         private void FillBoxData()
         {
             List<string> names = new List<string>();
@@ -36,6 +46,26 @@ namespace Excel
             boxData.ItemsSource = names;
         }
 
+        /// <summary>
+        /// Отображает значения столбцов.
+        /// </summary>
+        public Func<double, string> Formatter { get; set; }
+
+        /// <summary>
+        /// Значения столбцов гистограммы.
+        /// </summary>
+        public SeriesCollection BarCollection { get; set; }
+
+        /// <summary>
+        /// Названия столбцов гистограммы.
+        /// </summary>
+        public List<string> BarLabels { get; set; }
+
+        /// <summary>
+        /// Заполнение гистограммы.
+        /// </summary>
+        /// <param name="columnName"> Название столбца из таблицы. </param>
+        /// <param name="columnWidth"> Ширина столбца гистограммы. </param>
         private void FillHistogram(string columnName, int columnWidth = 1)
         {
             BarLabels = GetBarLabels(columnName, columnWidth);
@@ -47,6 +77,12 @@ namespace Excel
             chart.Series = BarCollection;
         }
 
+        /// <summary>
+        /// Метод возвращащий значения для гистограммы.
+        /// </summary>
+        /// <param name="columnName"> Название столбца из таблицы. </param>
+        /// <param name="columnWidth"> Ширина таблицы гистограммы. </param>
+        /// <returns> Значения для гистограммы. </returns>
         private SeriesCollection GetSeriesCollection(string columnName, int columnWidth = 1)
         {
             SeriesCollection series = new SeriesCollection();
@@ -94,6 +130,12 @@ namespace Excel
             return series;
         }
 
+        /// <summary>
+        /// Метод возвращающий названия столбцов гистограммы.
+        /// </summary>
+        /// <param name="columnName"> Название столбца таблицы. </param>
+        /// <param name="columnWidth"> Ширина столбца гистограммы. </param>
+        /// <returns> Названия столбцов гистограммы. </returns>
         private List<string> GetBarLabels(string columnName, int columnWidth = 1)
         {
             List<string> allBarLabels = new List<string>();
@@ -127,10 +169,11 @@ namespace Excel
             return barLabels;
         }
 
-        public Func<double, string> Formatter { get; set; }
-        public SeriesCollection BarCollection { get; set; }
-        public List<string> BarLabels { get; set; }
-
+        /// <summary>
+        /// Метод при изменении выбранного столбца таблицы.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void boxData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string columnName = boxData.SelectedItem.ToString();
@@ -141,6 +184,11 @@ namespace Excel
             saveButton.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Метод при изменении ширины столбца гистограммы.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void integerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (!(boxData is null || boxData.SelectedIndex == -1))
@@ -156,7 +204,7 @@ namespace Excel
                     {
                         FillHistogram(boxData.SelectedItem.ToString(), (int)integerUpDown.Value);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show($"Слишком большая ширина столбцов!{Environment.NewLine}{ex.Message}", "Ошибка");
                     }
@@ -164,15 +212,32 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Выбор цвета столбцов.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void colorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
-            chart.SeriesColors = new ColorsCollection
+            try
             {
-                (System.Windows.Media.Color)colorPicker.SelectedColor
-            };
-            FillHistogram(boxData.SelectedItem.ToString(),(int)integerUpDown.Value);
+                chart.SeriesColors = new ColorsCollection
+                {
+                    (Color)colorPicker.SelectedColor
+                };
+                FillHistogram(boxData.SelectedItem.ToString(), (int)integerUpDown.Value);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
+            }
         }
 
+        /// <summary>
+        /// Сохранение гистограммы.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -184,18 +249,29 @@ namespace Excel
                     SaveToPng(chart, saveFileDialog.FileName);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при сохранении файла{Environment.NewLine}{ex.Message}", "Ошибка");
             }
         }
 
+        /// <summary>
+        /// Сохранение в PNG.
+        /// </summary>
+        /// <param name="visual"> Гистограмма. </param>
+        /// <param name="fileName"> Путь сохранения. </param>
         private void SaveToPng(FrameworkElement visual, string fileName)
         {
             var encoder = new PngBitmapEncoder();
             EncodeVisual(visual, fileName, encoder);
         }
 
+        /// <summary>
+        /// Непосредственное сохранение.
+        /// </summary>
+        /// <param name="visual"> Гистограмма. </param>
+        /// <param name="fileName"> Путь сохранения. </param>
+        /// <param name="encoder"> Кодировщик. </param>
         private static void EncodeVisual(FrameworkElement visual, string fileName, BitmapEncoder encoder)
         {
             var bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
