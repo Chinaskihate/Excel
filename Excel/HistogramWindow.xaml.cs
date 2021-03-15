@@ -23,11 +23,14 @@ namespace Excel
     public partial class HistogramWindow : Window
     {
         DataTable dt;
+        List<string> numericColumnsNames;
+
         public HistogramWindow(DataTable dt)
         {
             InitializeComponent();
             this.dt = dt;
             FillBoxData();
+            numericColumnsNames = StatsWindow.GetNumericColumnsNames(dt);
         }
 
         private void FillBoxData()
@@ -52,7 +55,7 @@ namespace Excel
             chart.Series = BarCollection;
         }
 
-        private SeriesCollection GetSeriesCollection(string columnName)
+        private SeriesCollection GetSeriesCollection(string columnName, int columnWidth=1)
         {
             SeriesCollection series = new SeriesCollection();
             Dictionary<string, double> dict = new Dictionary<string, double>();
@@ -84,18 +87,19 @@ namespace Excel
             return series;
         }
 
-        private List<string> GetBarLabels(string columnName)
+        private List<string> GetBarLabels(string columnName, int columnWidth=1)
         {
-            List<string> barLabels = new List<string>();
+            List<string> allBarLabels = new List<string>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 string barLabel = dt.Rows[i][columnName].ToString();
-                if (!barLabels.Contains(barLabel))
+                if (!allBarLabels.Contains(barLabel))
                 {
-                    barLabels.Add(barLabel);
+                    allBarLabels.Add(barLabel);
                 }
             }
-            return barLabels;
+            List<string> barLabels = new List<string>(allBarLabels.Count / columnWidth + allBarLabels.Count % columnWidth);
+            return allBarLabels;
         }
 
         public Func<double, string> Formatter { get; set; }
@@ -104,7 +108,32 @@ namespace Excel
 
         private void boxData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FillHistogram(boxData.SelectedItem.ToString());
+            string columnName = boxData.SelectedItem.ToString();
+            if (numericColumnsNames.Contains(columnName))
+            {
+                labelBarWidth.Visibility = Visibility.Visible;
+                integerUpDown.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                labelBarWidth.Visibility = Visibility.Hidden;
+                integerUpDown.Visibility = Visibility.Hidden;
+                integerUpDown.Value = 1;
+            }
+            FillHistogram(columnName);
+        }
+
+        private void integerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (integerUpDown.Value <= 0)
+            {
+                MessageBox.Show("Нельзя установить ширину меньше 1","Ошибка");
+                integerUpDown.Value = 1;
+            }
+            else
+            {
+
+            }
         }
     }
 

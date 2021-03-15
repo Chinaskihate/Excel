@@ -9,14 +9,13 @@
         mc:Ignorable="d"
         Title="ChartWindow" Height="450" Width="800">
     <Grid>
-        <lvs:CartesianChart x:Name="chart" Series="{Binding BarCollection}" HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            LegendLocation="Right" Margin="0 0 150 0">
+        <lvs:CartesianChart x:Name="chart" Series="{Binding SeriesPoints}" HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" Margin="0 0 150 0">
             <lvs:CartesianChart.AxisX>
-                <lvs:Axis Title="Количественные данные" Labels="{Binding BarLabels}"></lvs:Axis>
+                <lvs:Axis Title="Аргумент функции" Labels="{Binding}"></lvs:Axis>
             </lvs:CartesianChart.AxisX>
             <lvs:CartesianChart.AxisY>
-                <lvs:Axis Title="Частота" LabelFormatter="{Binding Formatter}"></lvs:Axis>
+                <lvs:Axis Title="Значение функции" LabelFormatter="{Binding Formatter}"></lvs:Axis>
             </lvs:CartesianChart.AxisY>
         </lvs:CartesianChart>
 

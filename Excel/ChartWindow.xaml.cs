@@ -34,6 +34,7 @@ namespace Excel
         }
 
         public Func<double, string> Formatter { get; set; }
+        public SeriesCollection SeriesPoints { get; set; }
 
         private SeriesCollection GetSeries()
         {
@@ -88,7 +89,9 @@ namespace Excel
             if (boxDataX.SelectedIndex != -1 && boxDataY.SelectedIndex != -1)
             {
                 Formatter = value => value.ToString() + "N";
-                chart.Series = GetSeries();
+                SeriesPoints = GetSeries();
+                chart.Series = SeriesPoints;
+                chart.AxisX[0].Title = boxDataX.SelectedItem.ToString();
             }
         }
 
@@ -97,7 +100,9 @@ namespace Excel
             if (boxDataX.SelectedIndex != -1 && boxDataY.SelectedIndex != -1)
             {
                 Formatter = value => value.ToString() + "N";
-                chart.Series = GetSeries();
+                SeriesPoints = GetSeries();
+                chart.Series = SeriesPoints;
+                chart.AxisY[0].Title = boxDataY.SelectedItem.ToString();
             }
         }
     }
