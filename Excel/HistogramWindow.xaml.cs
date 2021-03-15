@@ -23,14 +23,12 @@ namespace Excel
     public partial class HistogramWindow : Window
     {
         DataTable dt;
-        List<string> numericColumnsNames;
 
         public HistogramWindow(DataTable dt)
         {
             InitializeComponent();
             this.dt = dt;
             FillBoxData();
-            numericColumnsNames = StatsWindow.GetNumericColumnsNames(dt);
         }
 
         private void FillBoxData()
@@ -43,11 +41,10 @@ namespace Excel
             boxData.ItemsSource = names;
         }
 
-        private void FillHistogram(string columnName)
+        private void FillHistogram(string columnName, int columnWidth = 1)
         {
-            BarCollection = GetSeriesCollection(columnName);
-
-            BarLabels = GetBarLabels(columnName);
+            BarLabels = GetBarLabels(columnName, columnWidth);
+            BarCollection = GetSeriesCollection(columnName, columnWidth);
 
             Formatter = value => value.ToString("N");
             DataContext = this;
@@ -55,7 +52,7 @@ namespace Excel
             chart.Series = BarCollection;
         }
 
-        private SeriesCollection GetSeriesCollection(string columnName, int columnWidth=1)
+        private SeriesCollection GetSeriesCollection(string columnName, int columnWidth = 1)
         {
             SeriesCollection series = new SeriesCollection();
             Dictionary<string, double> dict = new Dictionary<string, double>();
@@ -71,11 +68,26 @@ namespace Excel
                     dict.Add(key, 1);
                 }
             }
-            ChartValues<double> values = new ChartValues<double>();
+
+            ChartValues<double> allValues = new ChartValues<double>();
 
             foreach (var key in dict.Keys)
             {
-                values.Add(dict[key]);
+                allValues.Add(dict[key]);
+            }
+
+            ChartValues<double> values = new ChartValues<double>();
+            for (int i = 0; i < allValues.Count; i++)
+            {
+                if (i % columnWidth == 0)
+                {
+                    values.Add(allValues[i]);
+                }
+                else
+                {
+                    int index = (i - i % columnWidth) / columnWidth;
+                    values[index] += allValues[i];
+                }
             }
 
             series.Add(new ColumnSeries
@@ -87,7 +99,7 @@ namespace Excel
             return series;
         }
 
-        private List<string> GetBarLabels(string columnName, int columnWidth=1)
+        private List<string> GetBarLabels(string columnName, int columnWidth = 1)
         {
             List<string> allBarLabels = new List<string>();
             for (int i = 0; i < dt.Rows.Count; i++)
@@ -98,8 +110,26 @@ namespace Excel
                     allBarLabels.Add(barLabel);
                 }
             }
-            List<string> barLabels = new List<string>(allBarLabels.Count / columnWidth + allBarLabels.Count % columnWidth);
-            return allBarLabels;
+            if (columnWidth > allBarLabels.Count)
+            {
+                throw new ArgumentException("ColumnWidth can't be more than number of bars.");
+            }
+
+            List<string> barLabels = new List<string>();
+            for (int i = 0; i < allBarLabels.Count; i++)
+            {
+                if (i % columnWidth == 0)
+                {
+                    barLabels.Add(allBarLabels[i]);
+                }
+                else
+                {
+                    int index = (i - i % columnWidth) / columnWidth;
+                    barLabels[index] += $",{allBarLabels[i]}";
+                }
+            }
+
+            return barLabels;
         }
 
         public Func<double, string> Formatter { get; set; }
@@ -109,32 +139,31 @@ namespace Excel
         private void boxData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string columnName = boxData.SelectedItem.ToString();
-            if (numericColumnsNames.Contains(columnName))
-            {
-                labelBarWidth.Visibility = Visibility.Visible;
-                integerUpDown.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                labelBarWidth.Visibility = Visibility.Hidden;
-                integerUpDown.Visibility = Visibility.Hidden;
-                integerUpDown.Value = 1;
-            }
+            integerUpDown.Value = 1;
             FillHistogram(columnName);
         }
 
         private void integerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (integerUpDown.Value <= 0)
+            if (!(boxData is null || boxData.SelectedIndex == -1))
             {
-                MessageBox.Show("Нельзя установить ширину меньше 1","Ошибка");
-                integerUpDown.Value = 1;
-            }
-            else
-            {
-
+                if (integerUpDown.Value <= 0)
+                {
+                    MessageBox.Show("Нельзя установить ширину меньше 1", "Ошибка");
+                    integerUpDown.Value = 1;
+                }
+                else
+                {
+                    try
+                    {
+                        FillHistogram(boxData.SelectedItem.ToString(), (int)integerUpDown.Value);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show($"Слишком большая ширина столбцов!{Environment.NewLine}{ex.Message}", "Ошибка");
+                    }
+                }
             }
         }
     }
-
 }
