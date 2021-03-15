@@ -69,5 +69,16 @@
                   MinHeight="30"
                   SelectionChanged="boxData_SelectionChanged" Margin="10 40"
                   />
+
+        <Button x:Name="saveButton"
+                Content="Сохранить"
+                Visibility="Hidden"
+                Click="saveButton_Click"
+               MinHeight="30"
+               MinWidth="195"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               Margin="0,80,10,0"/>
+
     </Grid>
 </Window>
