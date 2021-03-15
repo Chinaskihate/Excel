@@ -36,30 +36,29 @@ namespace Excel
             openFileDialog.Title = "Открыть CSV файл";
             string path = string.Empty;
 
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                try
+                if (openFileDialog.ShowDialog() == true)
                 {
                     path = openFileDialog.FileName;
                 }
 
-                catch (Exception)
+                dt = GetDataTableFromCSV(path);
+                if (dt != null)
                 {
-                    MessageBox.Show("Could not load.");
+                    // Костыль, в описании метода объяснил.
+                    FixColumnNames(path);
+                    SetDefaultValues();
+                    dataGrid.ItemsSource = dt.DefaultView;
+                }
+                else
+                {
                     return;
                 }
             }
-
-            dt = GetDataTableFromCSV(path);
-            if (dt != null)
+            catch (Exception ex)
             {
-                // Костыль, в описании метода объяснил.
-                FixColumnNames(path);
-                SetDefaultValues();
-                dataGrid.ItemsSource = dt.DefaultView;
-            }
-            else
-            {
+                MessageBox.Show($"Could not load.{Environment.NewLine}{ex.Message}", "Ошибка");
                 return;
             }
         }
@@ -179,7 +178,7 @@ namespace Excel
             }
             dt = dtWithDefault;
         }
-        
+
         /// <summary>
         /// Открытия окна с статистикой.
         /// </summary>
@@ -187,10 +186,17 @@ namespace Excel
         /// <param name="e"> Аргументы событий. </param>
         private void statisticButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dt != null)
+            try
             {
-                StatsWindow sw = new StatsWindow(dt);
-                sw.Show();
+                if (dt != null)
+                {
+                    StatsWindow sw = new StatsWindow(dt);
+                    sw.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
             }
         }
 
@@ -201,10 +207,17 @@ namespace Excel
         /// <param name="e"> Аргументы событий. </param>
         private void histogramButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dt != null)
+            try
             {
-                HistogramWindow hw = new HistogramWindow(dt);
-                hw.Show();
+                if (dt != null)
+                {
+                    HistogramWindow hw = new HistogramWindow(dt);
+                    hw.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
             }
         }
 
@@ -215,10 +228,17 @@ namespace Excel
         /// <param name="e"> Аргументы событий. </param>
         private void chartButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dt != null)
+            try
             {
-                ChartWindow cw = new ChartWindow(dt);
-                cw.Show();
+                if (dt != null)
+                {
+                    ChartWindow cw = new ChartWindow(dt);
+                    cw.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
             }
         }
     }
