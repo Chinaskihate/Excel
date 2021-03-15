@@ -1,12 +1,53 @@
 ﻿<Window x:Class="Excel.ChartWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lvs="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Excel"
+        d:DataContext="{d:DesignInstance local:ChartWindow}"
         mc:Ignorable="d"
         Title="ChartWindow" Height="450" Width="800">
     <Grid>
-        
+        <lvs:CartesianChart x:Name="chart" Series="{Binding BarCollection}" HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            LegendLocation="Right" Margin="0 0 150 0">
+            <lvs:CartesianChart.AxisX>
+                <lvs:Axis Title="Количественные данные" Labels="{Binding BarLabels}"></lvs:Axis>
+            </lvs:CartesianChart.AxisX>
+            <lvs:CartesianChart.AxisY>
+                <lvs:Axis Title="Частота" LabelFormatter="{Binding Formatter}"></lvs:Axis>
+            </lvs:CartesianChart.AxisY>
+        </lvs:CartesianChart>
+
+        <Label Content="Столбец X:"
+               MinHeight="30"
+               MinWidth="195"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               Margin="0,10,10,0"></Label>
+
+        <Label Content="Столбец Y:"
+               MinHeight="30"
+               MinWidth="195"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               Margin="0,80,10,0"></Label>
+
+        <ComboBox x:Name="boxDataX"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Top"
+                  MinWidth="195" 
+                  MinHeight="30"
+                  SelectionChanged="boxDataX_SelectionChanged" Margin="10 40"
+                  />
+
+        <ComboBox x:Name="boxDataY"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Top"
+                  MinWidth="195" 
+                  MinHeight="30"
+                  SelectionChanged="boxDataY_SelectionChanged" Margin="10 110"
+                  />
     </Grid>
 </Window>

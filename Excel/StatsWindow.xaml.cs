@@ -27,10 +27,10 @@ namespace Excel
         {
             InitializeComponent();
             this.dt = dt;
-            boxData.ItemsSource = GetNumericColumnsNames();
+            boxData.ItemsSource = GetNumericColumnsNames(dt);
         }
 
-        private List<string> GetNumericColumnsNames()
+        static public List<string> GetNumericColumnsNames(DataTable dt)
         {
             List<string> names = new List<string>();
             for (int i = 0; i < dt.Columns.Count; i++)
