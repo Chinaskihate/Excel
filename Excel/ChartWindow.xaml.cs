@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Data;
 using System.Windows.Controls;
 using LiveCharts;
 using LiveCharts.Wpf;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using LiveCharts.Defaults;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Excel
 {
@@ -92,6 +88,7 @@ namespace Excel
                 SeriesPoints = GetSeries();
                 chart.Series = SeriesPoints;
                 chart.AxisX[0].Title = boxDataX.SelectedItem.ToString();
+                saveButton.Visibility = Visibility.Visible;
             }
         }
 
@@ -103,7 +100,40 @@ namespace Excel
                 SeriesPoints = GetSeries();
                 chart.Series = SeriesPoints;
                 chart.AxisY[0].Title = boxDataY.SelectedItem.ToString();
+                saveButton.Visibility = Visibility.Visible;
             }
+        }
+
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "png images (*.png)|*.png";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    SaveToPng(chart, saveFileDialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении файла{Environment.NewLine}{ex.Message}", "Ошибка");
+            }
+        }
+
+        private void SaveToPng(FrameworkElement visual, string fileName)
+        {
+            var encoder = new PngBitmapEncoder();
+            EncodeVisual(visual, fileName, encoder);
+        }
+
+        private static void EncodeVisual(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        {
+            var bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            bitmap.Render(visual);
+            var frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+            using (var stream = File.Create(fileName)) encoder.Save(stream);
         }
     }
 }
