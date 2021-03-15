@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Linq;
 using System.Windows;
 using System.Data.OleDb;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Data;
 
@@ -18,13 +11,24 @@ namespace Excel
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Таблица с данными.
+        /// </summary>
         DataTable dt;
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Открытие файла и чтение.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -49,6 +53,7 @@ namespace Excel
             dt = GetDataTableFromCSV(path);
             if (dt != null)
             {
+                // Костыль, в описании метода объяснил.
                 FixColumnNames(path);
                 SetDefaultValues();
                 dataGrid.ItemsSource = dt.DefaultView;
@@ -57,30 +62,13 @@ namespace Excel
             {
                 return;
             }
-
-            //string mess = string.Empty;
-            //for (int i = 0; i < dt.Columns.Count; i++)
-            //{
-            //    mess += dt.Rows[0][i];
-            //    double sum = 0;
-            //    for (int j = 1; j < dt.Rows.Count; j++)
-            //    {
-            //        try
-            //        {
-            //            object ob = dt.Rows[j][i];
-            //            sum += Convert.ToDouble(dt.Rows[j][i]);
-            //        }
-            //        catch (Exception)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    mess += sum + " " + Environment.NewLine;
-            //}
-
-            //MessageBox.Show(mess);
         }
 
+        /// <summary>
+        /// Получение данных из CSV файла.
+        /// </summary>
+        /// <param name="path"> Путь к файлу. </param>
+        /// <returns> Таблица с данными. </returns>
         private DataTable GetDataTableFromCSV(string path)
         {
             try
@@ -106,6 +94,12 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Метод чинит названия столбцов.
+        /// (Возникала проблема с исчезновением столбцов
+        /// в некоторых файлах)
+        /// </summary>
+        /// <param name="path"> Путь к файлу. </param>
         private void FixColumnNames(string path)
         {
             try
@@ -134,9 +128,13 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Метод ставит значения по умолчанию.
+        /// </summary>
         private void SetDefaultValues()
         {
             DataTable dtWithDefault = new DataTable();
+            // Разделение столбцов на типы.
             for (int i = 0; i < dt.Columns.Count; i++)
             {
                 bool isNumberColumn = true;
@@ -181,7 +179,12 @@ namespace Excel
             }
             dt = dtWithDefault;
         }
-
+        
+        /// <summary>
+        /// Открытия окна с статистикой.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void statisticButton_Click(object sender, RoutedEventArgs e)
         {
             if (dt != null)
@@ -191,6 +194,11 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Открытия окна с гистограммами.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void histogramButton_Click(object sender, RoutedEventArgs e)
         {
             if (dt != null)
@@ -200,6 +208,11 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Открытия окна c графиком.
+        /// </summary>
+        /// <param name="sender"> Отправитель.</param>
+        /// <param name="e"> Аргументы событий. </param>
         private void chartButton_Click(object sender, RoutedEventArgs e)
         {
             if (dt != null)

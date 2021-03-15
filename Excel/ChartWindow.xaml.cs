@@ -19,8 +19,15 @@ namespace Excel
     /// </summary>
     public partial class ChartWindow : Window
     {
+        /// <summary>
+        /// Таблица с данными.
+        /// </summary>
         DataTable dt;
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="dt"> Таблица с данными. </param>
         public ChartWindow(DataTable dt)
         {
             InitializeComponent();
@@ -28,10 +35,21 @@ namespace Excel
             FillDataX();
             FillDataY();
         }
-
+        
+        /// <summary>
+        /// Нужно для работы графика.
+        /// </summary>
         public Func<double, string> Formatter { get; set; }
+
+        /// <summary>
+        /// Данные для графика.
+        /// </summary>
         public SeriesCollection SeriesPoints { get; set; }
 
+        /// <summary>
+        /// Получение данных для графика.
+        /// </summary>
+        /// <returns> Данные для графика. </returns>
         private SeriesCollection GetSeries()
         {
             Dictionary<double, double[]> dict = new Dictionary<double, double[]>();
@@ -70,16 +88,27 @@ namespace Excel
             return result;
         }
 
+        /// <summary>
+        /// Заполнение осей возможными данными.
+        /// </summary>
         private void FillDataX()
         {
             boxDataX.ItemsSource = StatsWindow.GetNumericColumnsNames(dt);
         }
 
+        /// <summary>
+        /// Заполнение осей возможными данными.
+        /// </summary>
         private void FillDataY()
         {
             boxDataY.ItemsSource = StatsWindow.GetNumericColumnsNames(dt);
         }
 
+        /// <summary>
+        /// Изменение столбца для оси X.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void boxDataX_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (boxDataX.SelectedIndex != -1 && boxDataY.SelectedIndex != -1)
@@ -92,6 +121,11 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Изменение столбца для оси Y.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void boxDataY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (boxDataX.SelectedIndex != -1 && boxDataY.SelectedIndex != -1)
@@ -104,6 +138,11 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Метод при нажатии кнопки сохранить.
+        /// </summary>
+        /// <param name="sender"> Отправитель. </param>
+        /// <param name="e"> Аргументы событий. </param>
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -121,12 +160,23 @@ namespace Excel
             }
         }
 
+        /// <summary>
+        /// Сохранение графика в PNG.
+        /// </summary>
+        /// <param name="visual"> График. </param>
+        /// <param name="fileName"> Путь сохранения. </param>
         private void SaveToPng(FrameworkElement visual, string fileName)
         {
             var encoder = new PngBitmapEncoder();
             EncodeVisual(visual, fileName, encoder);
         }
 
+        /// <summary>
+        /// Непосредственное сохранение графика. 
+        /// </summary>
+        /// <param name="visual"> График. </param>
+        /// <param name="fileName"> Путь сохранения. </param>
+        /// <param name="encoder"> Кодировщик. </param>
         private static void EncodeVisual(FrameworkElement visual, string fileName, BitmapEncoder encoder)
         {
             var bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
